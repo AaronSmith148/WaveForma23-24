@@ -721,11 +721,16 @@ MonoBehaviour:
   vfxMaxDuration: 30
   mainUIPanel: {fileID: 2389859279713102295}
   openUIButton: {fileID: 1424667363}
-  sceneSwitchPanel: {fileID: 118945123955615246}
+  scenePanel: {fileID: 118945123955615246}
   selectedVFXText: {fileID: 2233081424860703509}
   vfxSelectionSlider: {fileID: 5920617264987814813}
   durationVFXText: {fileID: 6534257150998408742}
   vfxDurationSlider: {fileID: 1911056472916234345}
+  animationDistance: 475
+  tweenDuration: 0.5
+  mainPanelPos: 150
+  scenePanelPos: 385
+  openUIButtonPos: 50
 --- !u!4 &495785038
 Transform:
   m_ObjectHideFlags: 0

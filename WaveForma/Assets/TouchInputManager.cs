@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.VFX;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class TouchInputManager : MonoBehaviour
 {
@@ -22,16 +23,29 @@ public class TouchInputManager : MonoBehaviour
     public List<GameObject> vfxPrefabs = new List<GameObject>();
     public float vfxMaxDuration = 30f;
 
-    [Header ("UI")]
+    [Header ("UI GameObjects")]
     public GameObject mainUIPanel;
     public GameObject openUIButton;
-    public GameObject sceneSwitchPanel;
+    public GameObject scenePanel;
     public TextMeshProUGUI selectedVFXText;
     public Slider vfxSelectionSlider;
     public TextMeshProUGUI durationVFXText;
     public Slider vfxDurationSlider;
 
-    private bool scenePanelWasOpen = false;
+    [Header ("UI Animations")]
+    [SerializeField] float animationDistance;
+    [SerializeField] float tweenDuration;
+
+    //  X Value of the position of the canvas element
+    private RectTransform mainPanelRect;
+    private RectTransform scenePanelRect;
+    private RectTransform openUIButtonRect;
+    [SerializeField] float mainPanelPos, scenePanelPos, openUIButtonPos;
+
+    // private bool scenePanelWasOpen = false;      Used with no animationss
+    private bool mainUIPanelisVisible = false;
+    private bool scenePanelisVisible = false;
+    private bool openUIButtonisVisible = true;
     
     // Start is called before the first frame update
     void Start()
@@ -40,6 +54,18 @@ public class TouchInputManager : MonoBehaviour
         vfxSelectionSlider.maxValue = vfxPrefabs.Count - 1;
         vfxDurationSlider.maxValue = vfxMaxDuration;
         UpdateSelectedVFXText();
+
+        // Declaring Panel values
+        mainPanelRect = mainUIPanel.GetComponent<RectTransform>();
+        scenePanelRect = scenePanel.GetComponent<RectTransform>();
+        openUIButtonRect = openUIButton.GetComponent<RectTransform>();
+
+        // Panel Placements
+        mainUIPanel.SetActive(true);
+        openUIButton.SetActive(true);
+        scenePanel.SetActive(true);
+        mainPanelRect.DOAnchorPosX(mainPanelPos - animationDistance, .01f);
+        scenePanelRect.DOAnchorPosX(scenePanelPos - animationDistance, .01f);
     }
 
     // Update is called once per frame
@@ -109,22 +135,72 @@ public class TouchInputManager : MonoBehaviour
     }
 
     public void ToggleMainPanel() {
-        mainUIPanel.SetActive(!mainUIPanel.activeSelf);
-        openUIButton.SetActive(!openUIButton.activeSelf);
+        // Without Animations Toggle
+        // mainUIPanel.SetActive(!mainUIPanel.activeSelf);
+        // openUIButton.SetActive(!openUIButton.activeSelf);
 
-        // Saves the state of if the panel was open too
-        if (!mainUIPanel.activeSelf && sceneSwitchPanel.activeSelf) {
-            sceneSwitchPanel.SetActive(false);
+        // // Saves the state of if the panel was open too
+        // if (!mainUIPanel.activeSelf && scenePanel.activeSelf) {
+        //     scenePanel.SetActive(false);
+        // }
+        // else if (mainUIPanel.activeSelf && scenePanelWasOpen) {
+        //     scenePanel.SetActive(true);
+        // }
+
+        // Since we activated from this function running, this is when we do bring it in to the screen
+        // if (mainUIPanel.activeSelf) {
+        //     mainPanelRect.DOAnchorPosX(mainPanelPos, tweenDuration);
+        // }
+        // else if (!mainUIPanel.activeSelf) {
+        //     mainPanelRect.DOAnchorPosX(mainPanelPos - animationDistance, tweenDuration);
+        // }
+
+        if (!mainUIPanelisVisible) {
+            mainPanelRect.DOAnchorPosX(mainPanelPos, tweenDuration);
+            openUIButtonRect.DOAnchorPosX(openUIButtonPos - animationDistance, tweenDuration);
+
+            mainUIPanelisVisible = true;
+
+            if (scenePanelisVisible) {
+                scenePanelRect.DOAnchorPosX(scenePanelPos, tweenDuration);
+            }            
         }
-        else if (mainUIPanel.activeSelf && scenePanelWasOpen) {
-            sceneSwitchPanel.SetActive(true);
+        else {
+            mainPanelRect.DOAnchorPosX(mainPanelPos - animationDistance, tweenDuration);
+            openUIButtonRect.DOAnchorPosX(openUIButtonPos, tweenDuration);
+
+            mainUIPanelisVisible = false;
+
+            if (scenePanelisVisible) {
+                scenePanelRect.DOAnchorPosX(scenePanelPos - animationDistance, tweenDuration);
+            }
         }
+
     }
 
     public void ToggleScenePanel() {
-        sceneSwitchPanel.SetActive(!sceneSwitchPanel.activeSelf);
+        // Without Animations Toggle
+        // scenePanel.SetActive(!scenePanel.activeSelf);
 
-        scenePanelWasOpen = sceneSwitchPanel.activeSelf;
+        // scenePanelWasOpen = scenePanel.activeSelf;
+
+        // if (scenePanel.activeSelf) {
+        //     scenePanelRect.DOAnchorPosX(scenePanelPos, tweenDuration);
+        // }
+        // else if (!scenePanel.activeSelf) {
+        //     scenePanelRect.DOAnchorPosX(scenePanelPos - animationDistance, tweenDuration);
+        // }
+
+        // asdf
+
+        if (!scenePanelisVisible) {
+            scenePanelRect.DOAnchorPosX(scenePanelPos, tweenDuration);
+            scenePanelisVisible = true;       
+        }
+        else {
+            scenePanelRect.DOAnchorPosX(scenePanelPos - animationDistance, tweenDuration);
+            scenePanelisVisible = false;
+        }
     }
 
     public void SwitchScene(string Scene) {
