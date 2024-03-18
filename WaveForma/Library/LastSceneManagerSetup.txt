@@ -1,9 +1,5 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/Scenes/Template.unity
-=======
-- path: Assets/Scenes/SydneysScenes/ShaderGraph.unity
->>>>>>> main
+- path: Assets/Scenes/SydneysScenes/VFX Graph.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
