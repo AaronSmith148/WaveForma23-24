@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Working/Working_SciFiLines.unity
+- path: Assets/Scenes/Working/Working_Firefly.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
